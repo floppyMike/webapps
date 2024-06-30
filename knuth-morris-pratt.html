@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+	<title>Simple Website Layout</title>
+</head>
+<body>
+	<nav class="navbar navbar-expand navbar-light bg-light">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="/webapps">Michaels Webapps</a>
+			<ul class="navbar-nav">
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+						String Matching
+					</a>
+					<ul class="dropdown-menu dropdown-menu-end">
+						<li><a class="dropdown-item" href="/webapps/bruteforce.html">Brute Force</a></li>
+						<li><a class="dropdown-item" href="/webapps/knuth-morris-pratt.html">Knuth Morris Pratt</a></li>
+						<li><a class="dropdown-item" href="/webapps/boyer-moore.html">Boyer Moore</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	<div class="container d-flex flex-column align-items-center justify-content-center pt-5">
+
+		<h1>Knuth Morris Pratt</h1>
+
+		<div class="pt-5 mb-5 w-100">
+			<div class="card mb-5">
+				<div class="card-body">
+					<p class="card-text">Bruh</p>
+				</div>
+			</div>
+
+			<form id="matchingForm">
+				<div class="mb-3">
+    				<label for="needleInput" class="form-label">Needle</label>
+    				<input type="text" class="form-control" id="needleInput" aria-describedby="needleHelp">
+    				<div id="needleHelp" class="form-text">Needle for generating the parse table(s).</div>
+				</div>
+				<div class="mb-3">
+    				<label for="haystackInput" class="form-label d-flex justify-content-between align-items-center">
+						Haystack
+						<span class="badge text-bg-secondary">Optional</span>
+					</label>
+    				<textarea class="form-control" id="haystackInput"></textarea>
+    				<div id="haystackHelp" class="form-text">Optionaly search in the haystack.</div>
+				</div>
+				<button type="submit" class="btn btn-primary">Calculate</button>
+  			</form>
+		</div>
+
+		<hr hidden id="seperator" class="border border-primary w-100">
+
+		<div id="parseTable" class="pt-5"></div>
+		<div id="stringMatchTable" class="table-responsive mt-5 w-100"></div>
+	</div>
+
+	<script src="string-matching.js"></script>
+	<script>
+		inputForm.addEventListener("submit", function(event) {
+			event.preventDefault();
+
+			const needle = needleInput.value;
+			const haystack = haystackInput.value;
+
+			if (needle.trim() === '') {
+				return;
+			}
+
+			seperator.removeAttribute("hidden");
+
+			// Generate parse table
+			parseTable.innerHTML = '';
+
+			const table = document.createElement("table");
+			table.className = 'table table-bordered';
+
+			const thead = document.createElement('thead');
+			tappendRow(thead, "Position in the pattern", Array(needle.length).keys().map(i => [i, "text-normal-emphasis"]));
+			tappendRow(thead, "Pattern p[k]", needle.split('').map(c => [c, "text-normal-emphasis"]));
+			table.appendChild(thead);
+
+			const tbody = document.createElement('tbody');
+			tbody.className = "table-group-divider";
+
+			let prefixes = new Array(needle.length);
+			for (let k = 0; k < needle.length; ++k) {
+				const substr = needle.slice(1, k + 1);
+
+				let i = k;
+				for (; i > 0; --i) {
+					const substrSuffix = substr.slice(substr.length - i);
+					const needlePrefix = needle.slice(0, i);
+
+					if (substrSuffix === needlePrefix) {
+						break;
+					}
+				}
+
+				prefixes[k] = [i, "text-normal"];
+			}
+
+			tappendRow(tbody, "Longest prefix[k]", prefixes);
+
+			table.appendChild(tbody);
+			parseTable.appendChild(table);
+
+			// Generate match string
+
+			if (haystack.trim() === '') {
+				return;
+			}
+
+			let ibuf = new Array();
+
+			for (let i = 0, j = 0; i <= haystack.length - needle.length;) {
+				let iibuf = new Array(haystack.length);
+
+				for (let ii = 0; ii < j; ++ii) {
+					iibuf[i + ii] = [needle[ii], "text-normal"];
+				}
+
+
+				for (; j < needle.length; ++j) {
+					if (haystack[i + j] !== needle[j]) {
+						iibuf[i + j] = [needle[j], "text-danger"];
+
+						for (let ii = j + 1; ii < needle.length; ++ii) {
+							iibuf[i + ii] = [needle[ii], "text-normal"];
+						}
+
+						break;
+					}
+
+					iibuf[i + j] = [needle[j], "text-success"];
+				}
+
+				ibuf.push(iibuf);
+
+				if (j > 0) {
+					const next = prefixes[j - 1][0];
+					i += j - next;
+					j = next;
+				} else {
+					i += 1;
+					j = 0;
+				}
+			}
+
+			genMatchTable(ibuf);
+		});
+	</script>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
+

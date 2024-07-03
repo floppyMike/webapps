@@ -67,6 +67,8 @@
 		inputForm.addEventListener("submit", function(event) {
 			event.preventDefault();
 
+			const parseTable = document.getElementById('parseTable');
+
 			const needle = needleInput.value;
 			const haystack = haystackInput.value;
 

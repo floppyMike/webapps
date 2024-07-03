@@ -69,6 +69,8 @@
 		inputForm.addEventListener("submit", function(event) {
 			event.preventDefault();
 
+			const parseTable = document.getElementById('parseTable');
+
 			const needle = needleInput.value;
 			const haystack = haystackInput.value;
 
@@ -79,6 +81,8 @@
 			seperator.removeAttribute("hidden");
 
 			// No parse tables
+			parseTable.innerHTML = '';
+
 			const noParseTable = document.createElement("div")
 			noParseTable.className = "alert alert-primary";
 			noParseTable.textContent = "Brute force has no parse table.";

@@ -1,5 +1,4 @@
 const inputForm = document.getElementById("matchingForm");
-const parseTable = document.getElementById('parseTable');
 const needleInput = document.getElementById('needleInput');
 const haystackInput = document.getElementById('haystackInput');
 const stringMatchTable = document.getElementById('stringMatchTable');

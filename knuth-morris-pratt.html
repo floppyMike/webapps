@@ -79,7 +79,7 @@
 			table.className = 'table table-bordered';
 
 			const thead = document.createElement('thead');
-			tappendRow(thead, "Position in the pattern", Array(needle.length).keys().map(i => [i, "text-normal-emphasis"]));
+			tappendRow(thead, "Position in the pattern", Object.keys(Array(needle.length)).map(i => [i, "text-normal-emphasis"]));
 			tappendRow(thead, "Pattern p[k]", needle.split('').map(c => [c, "text-normal-emphasis"]));
 			table.appendChild(thead);
 

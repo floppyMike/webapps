@@ -97,12 +97,12 @@
 				table.className = 'table table-bordered';
 
 				const thead = document.createElement('thead');
-				tappendRow(thead, "c", lastMap.keys().map(c => [c, "text-normal-emphasis"]));
+				tappendRow(thead, "c", Object.keys(lastMap).map(c => [c, "text-normal-emphasis"]));
 				table.appendChild(thead);
 
 				const tbody = document.createElement('tbody');
 				tbody.className = "table-group-divider";
-				tappendRow(tbody, "Pattern p[k]", lastMap.values().map(c => [c, "text-normal"]));
+				tappendRow(tbody, "Pattern p[k]", Object.values(lastMap).map(c => [c, "text-normal"]));
 				table.appendChild(tbody);
 				lastTable.appendChild(table);
 			}
@@ -157,14 +157,14 @@
 				table.className = 'table table-bordered';
 
 				const thead = document.createElement('thead');
-				tappendRow(thead, "i", Array(needle.length).keys().map(i => [i, "text-normal-emphasis"]));
+				tappendRow(thead, "i", Object.keys(Array(needle.length)).map(i => [i, "text-normal-emphasis"]));
 				tappendRow(thead, "p[i]", needle.split('').map(c => [c, "text-normal-emphasis"]));
 				table.appendChild(thead);
 
 				const tbody = document.createElement('tbody');
 				tbody.className = "table-group-divider";
-				tappendRow(tbody, "suffix[i]", suffixArray.values().map(c => [c, "text-normal"]));
-				tappendRow(tbody, "shift[i]", shiftArray.values().map(c => [c, "text-normal"]));
+				tappendRow(tbody, "suffix[i]", Object.values(suffixArray).map(c => [c, "text-normal"]));
+				tappendRow(tbody, "shift[i]", Object.values(shiftArray).map(c => [c, "text-normal"]));
 				table.appendChild(tbody);
 				suffixTable.appendChild(table);
 			}

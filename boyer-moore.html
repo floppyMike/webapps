@@ -175,6 +175,14 @@
 				return;
 			}
 
+			if (!/^[ -~]+$/.test(haystack)) {
+				const hasWhitespace = document.createElement("div")
+				hasWhitespace.className = "alert alert-danger";
+				hasWhitespace.textContent = "Text input has illegal characters.";
+				parseTable.appendChild(hasWhitespace);
+				return;
+			}
+
 			let ibuf = new Array();
 
 			for (let i = 0; i <= haystack.length - needle.length;) {

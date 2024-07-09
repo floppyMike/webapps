@@ -52,10 +52,8 @@
 
 		<hr hidden id="seperator" class="border border-primary w-100">
 
-		<div id="results" class="w-100">
-			<div id="parseTable" class="pt-5"></div>
-			<div id="stringMatchTable" class="table-responsive mt-5 w-100"></div>
-		</div>
+		<div id="parseTable" class="pt-5"></div>
+		<div id="stringMatchTable" class="table-responsive mt-5 w-100"></div>
 	</div>
 
 	<script src="string-matching.js"></script>
@@ -85,6 +83,14 @@
 			// Generate match string
 
 			if (haystack.trim() === '') {
+				return;
+			}
+
+			if (!/^[ -~]+$/.test(haystack)) {
+				const hasWhitespace = document.createElement("div")
+				hasWhitespace.className = "alert alert-danger";
+				hasWhitespace.textContent = "Text input has illegal characters.";
+				parseTable.appendChild(hasWhitespace);
 				return;
 			}
 

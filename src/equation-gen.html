@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+{{ head.html }}
+<body>
+	{{ nav.html }}
+	<div class="container">
+		<h1 class="mt-3">Equation Generator</h1>
+		<p class="lead">Below are </p>
+
+		<div class="card">
+			<div class="card-header d-flex justify-content-between align-items-center">
+				Level 1a
+				<button id="1a" onclick="answerReveal('1a')" class="btn btn-sm btn-primary">Reveal Answer</button>
+			</div>
+			<div class="card-body d-flex justify-content-between align-items-center">
+				<span id="1a-equ"></span>
+				<span hidden id="1a-sol"></span>
+			</div>
+		</div>
+
+		<div class="card mt-3">
+			<div class="card-header d-flex justify-content-between align-items-center">
+				Level 1b
+				<button id="1b" onclick="answerReveal('1b')" class="btn btn-sm btn-primary">Reveal Answer</button>
+			</div>
+			<div class="card-body d-flex justify-content-between align-items-center">
+				<span id="1b-equ"></span>
+				<span hidden id="1b-sol"></span>
+			</div>
+		</div>
+
+		<div class="card mt-3">
+			<div class="card-header d-flex justify-content-between align-items-center">
+				Level 2
+				<button id="2" onclick="answerReveal('2')" class="btn btn-sm btn-primary">Reveal Answer</button>
+			</div>
+			<div class="card-body d-flex justify-content-between align-items-center">
+				<span id="2-equ"></span>
+				<span hidden id="2-sol"></span>
+			</div>
+		</div>
+
+		<div class="card mt-3">
+			<div class="card-header d-flex justify-content-between align-items-center">
+				Level 3
+				<button id="3" onclick="answerReveal('3')" class="btn btn-sm btn-primary">Reveal Answer</button>
+			</div>
+			<div class="card-body d-flex justify-content-between align-items-center">
+				<span id="3-equ"></span>
+				<span hidden id="3-sol"></span>
+			</div>
+		</div>
+
+		<div class="card mt-3">
+			<div class="card-header d-flex justify-content-between align-items-center">
+				Level 4
+				<button id="4" onclick="answerReveal('4')" class="btn btn-sm btn-primary">Reveal Answer</button>
+			</div>
+			<div class="card-body d-flex justify-content-between align-items-center">
+				<span id="4-equ"></span>
+				<span hidden id="4-sol"></span>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		function setEquation(level, equ, sol) {
+			const solDOM = document.getElementById(level + "-sol");
+			solDOM.hidden = true;
+			solDOM.innerText = "x = " + sol;
+
+			const butDOM = document.getElementById(level);
+			butDOM.innerText = "Reveal Answer";
+			butDOM.onclick = () => answerReveal(level);
+
+			const equDOM = document.getElementById(level + "-equ");
+			equDOM.innerText = equ;
+		}
+
+		function randInt() {
+			return Math.floor(Math.random() * 10) + 1;
+		}
+
+		const lvl2Func = { 
+			_1a: function() {
+				const x = randInt();
+				const a = randInt();
+				const y = x * a;
+				setEquation("1a", `${a}x = ${y}`, x);
+			},
+			_1b: function() {
+				const x = randInt();
+				const a = randInt();
+				const y = x + a;
+				setEquation("1b", `${a} + x = ${y}`, x);
+			},
+			_2: function() {
+				const x = randInt();
+				const a = randInt();
+				const b = randInt();
+				const y = x * a + b;
+				setEquation("2", `${a}x + ${b} = ${y}`, x);
+			},
+			_3: function() {
+				const a = randInt();
+				const b = randInt();
+				const c = randInt();
+				var x = randInt();
+
+				const d = (a - c) * x + b;
+				if (a == c) x = "Any";
+
+				setEquation("3", `${a}x + ${b} = ${c}x + ${d}`, x);
+			},
+			_4: function() {
+				const a = randInt();
+				const b = randInt();
+				const c = randInt();
+				const e = randInt();
+				var x = randInt();
+
+				const d = (e * a - c) * x + e * b;
+				if (a * e == c) x = "Any";
+
+				setEquation("4", `${e}(${a}x + ${b}) = ${c}x + ${d}`, x);
+			},
+		};
+
+		function answerReveal(level) {
+			const solDOM = document.getElementById(level + "-sol");
+			solDOM.hidden = false;
+
+			const butDOM = document.getElementById(level);
+			butDOM.innerText = "Generate New";
+			butDOM.onclick = lvl2Func["_" + level];
+		}
+	</script>
+
+	<script defer>
+		for (let key in lvl2Func) {
+			lvl2Func[key]();
+		}
+	</script>
+</body>
